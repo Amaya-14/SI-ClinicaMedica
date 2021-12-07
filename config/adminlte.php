@@ -237,30 +237,90 @@ return [
         ],
 
         // Sidebar items:
-        [
+        /*[
             'type' => 'sidebar-menu-search',
             'text' => 'search',
-        ],
-        [
+        ],*/
+        /*[
             'text' => 'blog',
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
-        ],
+        ],*/
+        ['header' => 'Módulos'],
         [
             'text'    => 'Personas',
+            'icon'    => 'fas fa-fw fa-users',
             'submenu' => [
                 [
                     'text'  => 'Pacientes',
+                    'icon'    => 'fas fa-fw fa-user',
                     'url'   => '/personas/pacientes'
-                    //'route' => 'ppacientes'
                 ],
                 [
                     'text'  => 'Empleados',
+                    'icon'    => 'fas fa-fw fa-user-md',
                     'url'   => '/personas/empleados',
-                    //'route' => 'pempleados',
                 ],
             ],
         ],
+        [
+            'text'    => 'Control de Citas',
+            'icon'    => 'fas fa-fw fa-clipboard-list',
+            'submenu' => [
+                [
+                    'text'  => 'Agenda',
+                    'icon'    => 'fas fa-fw fa-calendar-alt',
+                    'url'   => '/citas/agenda'
+                ],
+                [
+                    'text'  => 'Registros',
+                    'icon'    => 'fas fa-fw fa-book-open',
+                    'url'   => '/citas/registros',
+                ],
+            ],
+        ],
+        [
+            'text' => 'Horario',
+            'icon' => 'fas fa-fw fa-clipboard',
+            'url'  => '/rotacion/personal',
+        ],
+        [
+            'text'    => 'Almacen',
+            'icon'    => 'fas fa-fw fa-warehouse',
+            'submenu' => [
+                /*[
+                    'text'  => 'Medicamentos',
+                    'url'   => '/almacen/medicamentos',
+                ],
+                [
+                    'text'  => 'Materiales',
+                    'url'   => '/almacen/materiales',
+                ],*/
+                [
+                    'text'  => 'Productos',
+                    'icon'  => 'fas fa-fw fa-capsules',
+                    'url'   => '/almacen/productos',
+                ],
+                [
+                    'text'  => 'Inventario',
+                    'icon'  => 'fas fa-fw fa-cubes',
+                    'url'   => '#',
+                ],
+            ],
+        ],
+        [
+            'text'    => 'Caja y Facturación',
+            'icon'    => 'fas fa-fw fa-cash-register',
+            'url'   => '/caja/cajaChica'
+        ],
+        ['header' => '',],
+        ['header' => 'Configuración',],
+        [
+            'text'    => 'Permisos',
+            'icon'    => 'fas fa-fw fa-unlock-alt',
+            'url'   => '#'
+        ],
+        /*
         [
             'text'        => 'pages',
             'url'         => 'admin/pages',
@@ -332,7 +392,7 @@ return [
             'text'       => 'information',
             'icon_color' => 'cyan',
             'url'        => '#',
-        ],
+        ],*/
     ],
 
     /*
@@ -371,25 +431,71 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
                 ],
             ],
         ],
+        'DatatablesPlugins' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/js/dataTables.buttons.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/js/buttons.bootstrap4.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/js/buttons.html5.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/js/buttons.print.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/jszip/jszip.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/pdfmake/pdfmake.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/pdfmake/vfs_fonts.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/css/buttons.bootstrap4.min.css',
+                ],
+            ],
+        ],
+        
         'TempusDominusBs4' => [
             'active' => true,
             'files' => [
@@ -410,21 +516,67 @@ return [
                 ],
             ],
         ],
+        'BootstrapSelect' => [
+        'active' => true,
+        'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/bootstrap-select/dist/js/bootstrap-select.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/bootstrap-select/dist/css/bootstrap-select.min.css',
+                ],
+            ],
+        ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
+                    'location' => 'vendor/select2/js/select2.full.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/select2/css/select2.min.css',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
+                    'asset' => true,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
+                ],
+
+            ],
+        ],
+        /*'Select2' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
                 ],
             ],
-        ],
+        ],*/
         'Chartjs' => [
             'active' => false,
             'files' => [
@@ -436,11 +588,11 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
                 ],
             ],

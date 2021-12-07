@@ -1,7 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+/* Controladores de los modulos */
 use App\Http\Controllers\PersonaController;
+use App\Http\Controllers\CitaController;
+use App\Http\Controllers\RotacionController;
+use App\Http\Controllers\AlmacenController;
+use App\Http\Controllers\CajaFacturaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +27,63 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-/* MODULO PERSONAS */
-Route::get('/personas/{vista}', [PersonaController::class, 'ShowPersona']);
+
+/* módulo personas */
+Route::get('/personas/{vista}', [PersonaController::class, 'ShowPersona'])->name('registros');
+
+Route::get('/personas/detallePaciente/{id}', [PersonaController::class, 'ShowDetalle'])->name('detalle');
+
+Route::post('/persona/{vista}', [PersonaController::class, 'CreatePersona'])->name('nuevaPersona');
+
+Route::put('/persona/{str}/{cod}', [PersonaController::class, 'UpadatePersona'])->name('updatePersonas');
+
+
+
+
+
+/* módulo citas */
+Route::get('/citas/{vista}', [CitaController::class, 'ShowCita'])->name('cita');
+
+
+
+
+
+
+
+
+
+/* módulo distribución*/
+Route::get('/rotacion/personal', [RotacionController::class, 'ShowDistribucion'])->name('rotacion');
+
+
+
+
+
+
+
+
+
+
+/* módulo inventario */
+Route::get('/almacen/productos', [AlmacenController::class, 'ShowProductos'])->name('productos');
+
+Route::get('/almacen/{str}/{cod}', [AlmacenController::class, 'ShowInfoProducto'])->name('infoProducto');
+
+Route::get('/almacen/inventarios', [AlmacenController::class, 'ShowInventario'])->name('inventario');
+
+Route::post('/almacen/{str}', [AlmacenController::class, 'CreateProducto'])->name('nuevoProducto');
+
+Route::get('/almacen/producto/medicamentos/{cod}', [AlmacenController::class, 'GetMedicamento'])->name('getMedicamento');
+
+
+
+
+
+
+
+
+/* módulo caja y factura*/
+Route::get('/caja/cajaChica', [CajaFacturaController::class, 'ShowCaja'])->name('Caja');
