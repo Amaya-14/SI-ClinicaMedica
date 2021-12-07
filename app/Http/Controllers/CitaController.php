@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class CitaController extends Controller
 {
@@ -21,17 +22,9 @@ class CitaController extends Controller
             ['label' => 'OPCIONES', 'no-export' => true, 'width' => 15],
         ];
 
-        $config = [
-            /*
-            'data' => [ [] ],*/
+        $data = Http::get("http://localhost:3000/citas")->object();
 
-            //'order' => [[1, 'asc']],
-            //'columns' => [null, null, null, ['orderable' => false]],
-        ];
-
-        $data = DB::select("CALL sp_select_cita();");
-
-        $data2 = DB::select("CALL sp_select_pacientesORempleados('pacientes',0);");
+        $data2 = Http::get("http://localhost:3000/pacientes")->object();
 
         $data3 = DB::select("CALL sp_select_persona('doctores',0);");
 

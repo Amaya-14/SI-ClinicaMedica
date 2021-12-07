@@ -29,14 +29,14 @@
         <x-adminlte-datatable id="tablaCitas" :heads="$heads" theme="light" striped hoverable beautify bordered compressed with-buttons>
           @foreach($data as $row)
               <tr>
-                <td>{!! $row->cod_cita !!}</td>
-                <td>{!! $row->cod_paciente !!}</td>
-                <td>{!! $row->cod_doctor !!}</td>
-                <td>{!! $row->fec_cita !!}</td>
-                <td>{!! $row->hora_inicio !!}</td>
-                <td>{!! $row->hora_final !!}</td>
-                <td>{!! $row->tip_estado !!}</td>
-                <td>{!! $row->tip_cita !!}</td>
+                <td>{!! $row->codigo !!}</td>
+                <td>{!! $row->paciente !!}</td>
+                <td>{!! $row->doctor !!}</td>
+                <td>{!! $row->fecha !!}</td>
+                <td>{!! $row->inicio !!}</td>
+                <td>{!! $row->final !!}</td>
+                <td>{!! $row->estado !!}</td>
+                <td>{!! $row->tipoCita !!}</td>
                 <td>
                   <nobr>
                     <a class="btn btn-xs btn-primary text-white mx-1 shadow" title="Editar">

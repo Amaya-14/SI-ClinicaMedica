@@ -39,7 +39,7 @@
                   <select class="form-select" id="paciente" required>
                     <option selected disabled value="">Seleccione</option>
                     @foreach($data2 as $row)
-                      <option value="{!! $row->codigo !!}">{!! $row->nombre !!}</option>
+                      <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
                     @endforeach
                   </select>
                   <label form="paciente">Paciente</label>
@@ -50,7 +50,7 @@
                   <select class="form-select" id="medico" required>
                     <option selected disabled value="">Seleccione</option>
                     @foreach($data3 as $row)
-                      <option value="{!! $row->codigo !!}">{!! $row->nombre !!}</option>
+                      <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
                     @endforeach
                   </select>
                   <label form="medico">Doctor/a</label>
