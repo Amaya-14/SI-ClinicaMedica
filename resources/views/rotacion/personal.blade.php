@@ -14,9 +14,11 @@
         border-color: #ddd;
         color: #444;
       }
+
+    form{
+        display: inline-block;
+      }  
   </style>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 @stop
 
 @section('content_header')
@@ -27,7 +29,7 @@
           <h3 class="m-0">Horario</h3>
         </div>
         <div class="col d-flex justify-content-end align-content-center">
-          <a class="btn bg-teal" data-toggle="modal" data-target="#modalDetalle">Nuevo Registro</a>
+          <a class="btn bg-teal" data-toggle="modal" data-target="#modalDetallePost">Nuevo Registro</a>
         </div>
       </div>
     </section>
@@ -36,26 +38,27 @@
       <x-adminlte-datatable id="tablaHorarios" :heads="$heads" theme="light" striped hoverable beautify bordered compressed with-buttons>
         @foreach($data as $row)
             <tr>
-              <td>{!! $row->codigo !!}</td>
+              <td>{!! $count++ !!}</td>
               <td>{!! $row->empleado !!}</td>
               <td>{!! $row->dias !!}</td>
               <td>{!! $row->horaE !!}</td>
               <td>{!! $row->horaS !!}</td>
               <td>
-                <span class="badge rounded-pill" style="background-color:{!! $row->color !!} ">
+                <span class="badge rounded-pill" style="background-color:{!! $row->color !!}">
                   {!! $row->puesto !!}
                 </span>
               </td>
               <td>
                 <nobr>
-                  <a class="btn btn-xs btn-primary text-white mx-1 shadow" title="Editar">
-                    <i class="fa fa-lg fa-fw fa-pen"></i>
-                  </a>
-                  <a class="btn btn-xs btn-danger text-white mx-1 shadow" title="Eliminar">
-                    <i class="fa fa-lg fa-fw fa-trash"></i>
-                  </a>
-                  <a class="btn btn-xs btn-default bg-teal text-white mx-1 shadow" title="Detalles">
-                    <i class="fa fa-lg fa-fw fa-eye"></i>
+                  <form action="{{route('deleteRotacion', $row->codigo)}}" method="post">
+                    @csrf
+                    @method('delete')
+                    <button class="btn btn-xs btn-danger text-white mx-1 shadow" title="Eliminar">
+                      <i class="fa fa-lg fa-fw fa-trash"></i>
+                    </button>
+                  </form>
+                  <a class="btn btn-xs btn-default bg-teal text-white mx-1 shadow btnDetalles" title="Detalles" data-toggle="modal" data-target="#modalDetallePut"  id="{!! $count !!}">
+                    <i class="fa fa-lg fa-fw fa-eye" id="{!! $count !!}"></i>
                   </a>
                 </nobr>
               </td>
@@ -67,16 +70,17 @@
 @stop
 
 @section('content')
-  <form action="">
+  <form action="{{route('nuevaRotacion')}}" method="post">
+    @csrf
     {{-- Custom --}}
-    <x-adminlte-modal id="modalDetalle" title="Nuevo Registro" size="lg" theme="teal"
+    <x-adminlte-modal id="modalDetallePost" title="Nuevo Registro" size="lg" theme="teal"
       icon="fas fa-plus-square" v-centered static-backdrop scrollable>  
       <section>
           {{-- Fila 1 --}}
           <div class="row g-2">
             <div class="col-md">
               <div class="form-floating mb-3">
-                <select class="form-select" id="empleado" required>
+                <select class="form-select" id="empleado" name="codigo" required>
                   <option selected disabled value="">Seleccione</option>
                   @foreach($data2 as $row)
                     <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
@@ -87,7 +91,7 @@
             </div>
             <div class="col-md">
               <div class="form-floating mb-3">
-                <select class="form-select" id="dias" required>
+                <select class="form-select" id="dias" name="dias" required>
                   <option selected disabled value="">Seleccione</option>
                   <option value="L">Lunes</option>
                   <option value="Ma">Martes</option>
@@ -103,19 +107,19 @@
           <div class="row g-2">
             <div class="col-md">
               <div class="form-floating mb-3">
-                <input type="time" class="form-control" id="horaE" required>
+                <input type="time" class="form-control" id="horaE" name="entrada" required>
                 <label for="horaE">Entrada</label>
               </div>
             </div>
             <div class="col-md">
               <div class="form-floating mb-3">
-                <input type="time" class="form-control" id="horaS" required>
+                <input type="time" class="form-control" id="horaS" name="salida" required>
                 <label for="horaS">Salida</label>
               </div>
             </div>
             <div class="col-md">
               <div class="form-floating mb-3">
-                <select class="form-select" id="jornada" required>
+                <select class="form-select" id="jornada" name="jornada" required>
                   <option selected disabled value="">Seleccione</option>
                   <option value="M">Matutina</option>
                   <option value="V">Vespertina</option>
@@ -126,7 +130,7 @@
             </div>
             <div class="col-sm-1">
               <div class="form-floating mb-3">
-                <input type="color" class="form-control form-control-color" id="color" placeholder="" required>
+                <input type="color" class="form-control form-control-color" id="color" name="color" placeholder="" required>
                 <label for="color">Color</label>
               </div>
             </div>
@@ -136,7 +140,7 @@
           <div class="row g-2">
             <div class="col-md">
               <div class="form-floating mb-3">
-                <textarea class="form-control" placeholder="Opcional" id="descripcion"></textarea>
+                <textarea class="form-control" placeholder="Opcional" id="descripcion" name="descripcion"></textarea>
                 <label for="descripcion">Descripción</label>
               </div>
             </div>
@@ -149,15 +153,140 @@
         </x-slot>
       </x-adminlte-modal>
     </form>
+
+
+    <form action="{{route('updateRotacion', 7)}}" method="post">
+    @csrf
+    @method('put')
+
+    {{-- Custom --}}
+    <x-adminlte-modal id="modalDetallePut" title="Actualizar Registro" size="lg" theme="teal"
+      icon="fas fa-plus-square" v-centered static-backdrop scrollable>  
+      <section class="inputsUpdate">
+          {{-- Fila 1 --}}
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating mb-3">
+                <select class="form-select inputUpdate" id="empleado" name="codigo" disabled required>
+                  </option>
+                  @foreach($data2 as $row)
+                    <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
+                  @endforeach
+                </select>
+                <label form="empleado">Empleado</label>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating mb-3">
+                <select class="form-select inputUpdate" id="dias" name="dias" disabled required>
+                  <option selected></option>
+                  <option value="L">Lunes</option>
+                  <option value="Ma">Martes</option>
+                  <option value="Mi">Miercoles</option>
+                  <option value="J">Jueves</option>
+                  <option value="V">Viernes</option>
+                </select>
+                <label form="dias">Días</label>
+              </div>
+            </div>
+          </div>
+          {{-- Fila 2 --}}
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating mb-3">
+                <input type="time" class="form-control inputUpdate" id="horaE" name="entrada" disabled required>
+                <label for="horaE">Entrada</label>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating mb-3">
+                <input type="time" class="form-control inputUpdate" id="horaS" name="salida" disabled required>
+                <label for="horaS">Salida</label>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating mb-3">
+                <select class="form-select inputUpdate" id="jornada" name="jornada" disabled required>
+                  <option selected disabled value="">Seleccione</option>
+                  <option value="M">Matutina</option>
+                  <option value="V">Vespertina</option>
+                  <option value="N">Nocturna</option>
+                </select>
+                <label form="jornada">Jornada</label>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <div class="form-floating mb-3">
+                <input type="color" class="form-control form-control-color inputUpdate" id="color" name="color" placeholder="" disabled required>
+                <label for="color">Color</label>
+              </div>
+            </div>
+          </div>
+
+          {{-- Fila 3 --}}
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating mb-3">
+                <textarea class="form-control inputUpdate" placeholder="Opcional" id="descripcion" name="descripcion" disabled></textarea>
+                <label for="descripcion">Descripción</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 d-none">
+            <div class="col-md">
+              <input type="number" class="form-control inputUpdate" id="rotacion" name="rotacion">
+            </div>
+          </div>
+
+        </section>
+        <x-slot name="footerSlot">
+          <a class="btn btn-warning" id="btnEditar">Editar</a>
+          <x-adminlte-button class="d-none btnHidden" type="submit"  theme="success" label="Actualizar"/>
+          <x-adminlte-button class="d-none btnHidden" theme="danger" label="Cancelar" data-dismiss="modal"/>
+        </x-slot>
+      </x-adminlte-modal>
+    </form>
 @stop
   
 @section('js')
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+  <script >
+    window.onload = function(){
+      let buttons = document.querySelectorAll(".btnDetalles");
+      let inputsU = document.querySelectorAll(".inputUpdate");
+      let btnEditar = document.getElementById('btnEditar');
+      let btnHiden = document.querySelectorAll(".btnHidden");
+      
+      buttons.forEach(el => {
+        el.addEventListener("click", e => {
+          let id = e.target.getAttribute('id');
+          id = id -2;          
+          let data = {!! json_encode($data) !!};
+          inputsU[0].options[0].innerHTML = data[id].empleado;
+          inputsU[0].options[0].value = data[id].codEmpleado;
+          inputsU[1].options[0].innerHTML = data[id].dias;
+          inputsU[1].options[0].value = data[id].dias;
+          inputsU[2].value = data[id].horaE;
+          inputsU[3].value = data[id].horaS;
+          inputsU[4].options[0].innerHTML = data[id].jornada;
+          inputsU[4].options[0].value = data[id].jornada;
+          inputsU[5].value = data[id].color;
+          inputsU[6].value = data[id].descripcion;
+          inputsU[7].value = data[id].codigo;
+        });
+      });
 
+      btnEditar.addEventListener('click', () =>{
+        btnEditar.classList.add('d-none');
+        btnHiden.forEach(el => el.classList.remove('d-none'));
+        inputsU.forEach(el => el.disabled = false);
+      });
 
-
-<script>
-  $('.multipleS').selectpicker();
-</script>
+      btnHiden[1].addEventListener('click', () =>{
+        inputsU.forEach(el => el.disabled = true);
+        btnEditar.classList.remove('d-none');
+        btnHiden.forEach(el => el.classList.add('d-none'));
+      })
+    }
+  </script>
 @stop

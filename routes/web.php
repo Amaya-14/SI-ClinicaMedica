@@ -55,8 +55,15 @@ Route::get('/citas/{vista}', [CitaController::class, 'ShowCita'])->name('cita');
 
 
 
-/* módulo distribución*/
+/* módulo rotacion*/
 Route::get('/rotacion/personal', [RotacionController::class, 'ShowDistribucion'])->name('rotacion');
+
+Route::post('/rotacion/personal', [RotacionController::class, 'CreateRotacion'])->name('nuevaRotacion');
+
+Route::put('/rotacion/edit/{cod}', [RotacionController::class, 'UpdateRotacion'])->name('updateRotacion');
+
+Route::delete('/rotacion/personal/{cod}', [RotacionController::class, 'DeleteRotacion'])->name('deleteRotacion');
+
 
 
 
