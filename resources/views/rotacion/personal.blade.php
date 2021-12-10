@@ -10,14 +10,13 @@
 
   <style>
     .btn-color{
-        background-color: #f8f9fa;
-        border-color: #ddd;
-        color: #444;
-      }
-
+      background-color: #f8f9fa;
+      border-color: #ddd;
+      color: #444;
+    }
     form{
-        display: inline-block;
-      }  
+      display: inline-block;
+    }  
   </style>
 @stop
 
@@ -50,7 +49,7 @@
               </td>
               <td>
                 <nobr>
-                  <form action="{{route('deleteRotacion', $row->codigo)}}" method="post">
+                  <form class="formEliminar" action="{{route('deleteRotacion', $row->codigo)}}" method="post">
                     @csrf
                     @method('delete')
                     <button class="btn btn-xs btn-danger text-white mx-1 shadow" title="Eliminar">
@@ -70,193 +69,195 @@
 @stop
 
 @section('content')
+  <!-- Formulario para agregar un registro -->
   <form action="{{route('nuevaRotacion')}}" method="post">
     @csrf
-    {{-- Custom --}}
+    
     <x-adminlte-modal id="modalDetallePost" title="Nuevo Registro" size="lg" theme="teal"
       icon="fas fa-plus-square" v-centered static-backdrop scrollable>  
       <section>
-          {{-- Fila 1 --}}
-          <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <select class="form-select" id="empleado" name="codigo" required>
-                  <option selected disabled value="">Seleccione</option>
-                  @foreach($data2 as $row)
-                    <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
-                  @endforeach
-                </select>
-                <label form="empleado">Empleado</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <select class="form-select" id="dias" name="dias" required>
-                  <option selected disabled value="">Seleccione</option>
-                  <option value="L">Lunes</option>
-                  <option value="Ma">Martes</option>
-                  <option value="Mi">Miercoles</option>
-                  <option value="J">Jueves</option>
-                  <option value="V">Viernes</option>
-                </select>
-                <label form="dias">Días</label>
-              </div>
+        {{-- Fila 1 --}}
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <select class="form-select" id="empleado" name="codigo" required>
+                <option selected disabled value="">Seleccione</option>
+                @foreach($data2 as $row)
+                  <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
+                @endforeach
+              </select>
+              <label form="empleado">Empleado</label>
             </div>
           </div>
-          {{-- Fila 2 --}}
-          <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <input type="time" class="form-control" id="horaE" name="entrada" required>
-                <label for="horaE">Entrada</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <input type="time" class="form-control" id="horaS" name="salida" required>
-                <label for="horaS">Salida</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <select class="form-select" id="jornada" name="jornada" required>
-                  <option selected disabled value="">Seleccione</option>
-                  <option value="M">Matutina</option>
-                  <option value="V">Vespertina</option>
-                  <option value="N">Nocturna</option>
-                </select>
-                <label form="jornada">Jornada</label>
-              </div>
-            </div>
-            <div class="col-sm-1">
-              <div class="form-floating mb-3">
-                <input type="color" class="form-control form-control-color" id="color" name="color" placeholder="" required>
-                <label for="color">Color</label>
-              </div>
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <select class="form-select" id="dias" name="dias" required>
+                <option selected disabled value="">Seleccione</option>
+                <option value="L">Lunes</option>
+                <option value="Ma">Martes</option>
+                <option value="Mi">Miercoles</option>
+                <option value="J">Jueves</option>
+                <option value="V">Viernes</option>
+              </select>
+              <label form="dias">Días</label>
             </div>
           </div>
+        </div>
+        {{-- Fila 2 --}}
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <input type="time" class="form-control" id="horaE" name="entrada" required>
+              <label for="horaE">Entrada</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <input type="time" class="form-control" id="horaS" name="salida" required>
+              <label for="horaS">Salida</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <select class="form-select" id="jornada" name="jornada" required>
+                <option selected disabled value="">Seleccione</option>
+                <option value="M">Matutina</option>
+                <option value="V">Vespertina</option>
+                <option value="N">Nocturna</option>
+              </select>
+              <label form="jornada">Jornada</label>
+            </div>
+          </div>
+          <div class="col-sm-1">
+            <div class="form-floating mb-3">
+              <input type="color" class="form-control form-control-color" id="color" name="color" placeholder="" required>
+              <label for="color">Color</label>
+            </div>
+          </div>
+        </div>
 
-          {{-- Fila 3 --}}
-          <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <textarea class="form-control" placeholder="Opcional" id="descripcion" name="descripcion"></textarea>
-                <label for="descripcion">Descripción</label>
-              </div>
+        {{-- Fila 3 --}}
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <textarea class="form-control" placeholder="Opcional" id="descripcion" name="descripcion"></textarea>
+              <label for="descripcion">Descripción</label>
             </div>
           </div>
-
-        </section>
+        </div>
+      </section>
         <x-slot name="footerSlot">
           <x-adminlte-button type="submit"  theme="success" label="Guardar"/>
           <x-adminlte-button theme="danger" label="Cancelar" data-dismiss="modal"/>
         </x-slot>
-      </x-adminlte-modal>
-    </form>
+    </x-adminlte-modal>
+  </form>
 
-
-    <form action="{{route('updateRotacion', 7)}}" method="post">
+  <!-- Formulario para actulizar un registro -->
+  <form action="{{route('updateRotacion', 7)}}" method="post">
     @csrf
     @method('put')
-
-    {{-- Custom --}}
-    <x-adminlte-modal id="modalDetallePut" title="Actualizar Registro" size="lg" theme="teal"
-      icon="fas fa-plus-square" v-centered static-backdrop scrollable>  
+    
+    <x-adminlte-modal id="modalDetallePut" title="Actualizar Registro" size="lg" theme="primary"
+    icon="fas fa-plus-square" v-centered static-backdrop scrollable>  
       <section class="inputsUpdate">
-          {{-- Fila 1 --}}
-          <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <select class="form-select inputUpdate" id="empleado" name="codigo" disabled required>
-                  </option>
-                  @foreach($data2 as $row)
-                    <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
-                  @endforeach
-                </select>
-                <label form="empleado">Empleado</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <select class="form-select inputUpdate" id="dias" name="dias" disabled required>
-                  <option selected></option>
-                  <option value="L">Lunes</option>
-                  <option value="Ma">Martes</option>
-                  <option value="Mi">Miercoles</option>
-                  <option value="J">Jueves</option>
-                  <option value="V">Viernes</option>
-                </select>
-                <label form="dias">Días</label>
-              </div>
+        {{-- Fila 1 --}}
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <select class="form-select inputUpdate" id="empleado" name="codigo" disabled required>
+                </option>
+                @foreach($data2 as $row)
+                  <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
+                @endforeach
+              </select>
+              <label form="empleado">Empleado</label>
             </div>
           </div>
-          {{-- Fila 2 --}}
-          <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <input type="time" class="form-control inputUpdate" id="horaE" name="entrada" disabled required>
-                <label for="horaE">Entrada</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <input type="time" class="form-control inputUpdate" id="horaS" name="salida" disabled required>
-                <label for="horaS">Salida</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <select class="form-select inputUpdate" id="jornada" name="jornada" disabled required>
-                  <option selected disabled value="">Seleccione</option>
-                  <option value="M">Matutina</option>
-                  <option value="V">Vespertina</option>
-                  <option value="N">Nocturna</option>
-                </select>
-                <label form="jornada">Jornada</label>
-              </div>
-            </div>
-            <div class="col-sm-1">
-              <div class="form-floating mb-3">
-                <input type="color" class="form-control form-control-color inputUpdate" id="color" name="color" placeholder="" disabled required>
-                <label for="color">Color</label>
-              </div>
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <select class="form-select inputUpdate" id="dias" name="dias" disabled required>
+                <option selected></option>
+                <option value="L">Lunes</option>
+                <option value="Ma">Martes</option>
+                <option value="Mi">Miercoles</option>
+                <option value="J">Jueves</option>
+                <option value="V">Viernes</option>
+              </select>
+              <label form="dias">Días</label>
             </div>
           </div>
+        </div>
+        {{-- Fila 2 --}}
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <input type="time" class="form-control inputUpdate" id="horaE" name="entrada" disabled required>
+              <label for="horaE">Entrada</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <input type="time" class="form-control inputUpdate" id="horaS" name="salida" disabled required>
+              <label for="horaS">Salida</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <select class="form-select inputUpdate" id="jornada" name="jornada" disabled required>
+                <option selected disabled value="">Seleccione</option>
+                <option value="M">Matutina</option>
+                <option value="V">Vespertina</option>
+                <option value="N">Nocturna</option>
+              </select>
+              <label form="jornada">Jornada</label>
+            </div>
+          </div>
+          <div class="col-sm-1">
+            <div class="form-floating mb-3">
+              <input type="color" class="form-control form-control-color inputUpdate" id="color" name="color" placeholder="" disabled required>
+              <label for="color">Color</label>
+            </div>
+          </div>
+        </div>
 
-          {{-- Fila 3 --}}
-          <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating mb-3">
-                <textarea class="form-control inputUpdate" placeholder="Opcional" id="descripcion" name="descripcion" disabled></textarea>
-                <label for="descripcion">Descripción</label>
-              </div>
+        {{-- Fila 3 --}}
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating mb-3">
+              <textarea class="form-control inputUpdate" placeholder="Opcional" id="descripcion" name="descripcion" disabled></textarea>
+              <label for="descripcion">Descripción</label>
             </div>
           </div>
+        </div>
 
-          <div class="row g-2 d-none">
-            <div class="col-md">
-              <input type="number" class="form-control inputUpdate" id="rotacion" name="rotacion">
-            </div>
+        <div class="row g-2 d-none">
+          <div class="col-md">
+            <input type="number" class="inputUpdate" id="rotacion" name="rotacion">
           </div>
+        </div>
 
-        </section>
-        <x-slot name="footerSlot">
-          <a class="btn btn-warning" id="btnEditar">Editar</a>
-          <x-adminlte-button class="d-none btnHidden" type="submit"  theme="success" label="Actualizar"/>
-          <x-adminlte-button class="d-none btnHidden" theme="danger" label="Cancelar" data-dismiss="modal"/>
-        </x-slot>
-      </x-adminlte-modal>
-    </form>
+      </section>
+      <x-slot name="footerSlot">
+        <a class="btn btn-warning" id="btnEditar">Editar</a>
+        <x-adminlte-button class="d-none btnHidden" type="submit"  theme="success" label="Actualizar"/>
+        <x-adminlte-button class="d-none btnHidden" theme="danger" label="Cancelar" data-dismiss="modal"/>
+      </x-slot>
+    </x-adminlte-modal>
+  </form>
 @stop
   
 @section('js')
   <script >
-    window.onload = function(){
+    $( document ).ready(function() {
+
+      // variables
       let buttons = document.querySelectorAll(".btnDetalles");
       let inputsU = document.querySelectorAll(".inputUpdate");
       let btnEditar = document.getElementById('btnEditar');
       let btnHiden = document.querySelectorAll(".btnHidden");
       
+      //
       buttons.forEach(el => {
         el.addEventListener("click", e => {
           let id = e.target.getAttribute('id');
@@ -276,17 +277,52 @@
         });
       });
 
+      // 
       btnEditar.addEventListener('click', () =>{
         btnEditar.classList.add('d-none');
         btnHiden.forEach(el => el.classList.remove('d-none'));
         inputsU.forEach(el => el.disabled = false);
       });
 
-      btnHiden[1].addEventListener('click', () =>{
-        inputsU.forEach(el => el.disabled = true);
-        btnEditar.classList.remove('d-none');
-        btnHiden.forEach(el => el.classList.add('d-none'));
-      })
-    }
+      //
+      $('#modalDetallePut').on('hidden.bs.modal', function (e) {
+        inputsU.forEach(el => {
+          if(!el.disabled) el.disabled = true;
+          btnEditar.classList.remove('d-none');
+          btnHiden.forEach(el => el.classList.add('d-none'));
+        });
+      });
+
+      //
+      @if(session('eliminar') == 'ok')
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: '¡Eliminado!',
+          text: 'El registro se elimino con éxito.',
+          showConfirmButton: false,
+          timer: 2000
+        });
+      @endif
+
+      //
+      $('.formEliminar').submit(function(e){
+        e.preventDefault();
+        Swal.fire({
+          title: '¿Estás seguro/a?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '¡Si, eliminar!',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.submit();
+          }
+        });
+      });
+    });
   </script>
 @stop

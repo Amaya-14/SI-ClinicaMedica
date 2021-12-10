@@ -63,6 +63,6 @@ class RotacionController extends Controller
 
         Http::delete("http://localhost:3000/rotacion/$cod");
 
-        return redirect()->route('rotacion');
+        return redirect()->route('rotacion')->with('eliminar', 'ok');
     }
 }
