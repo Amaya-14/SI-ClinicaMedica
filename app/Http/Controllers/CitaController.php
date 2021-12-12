@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 
 class CitaController extends Controller
 {
-    public function ShowCita($vista){
+    public function ShowCita(){
 
         $heads = [
             '#',
@@ -28,6 +28,49 @@ class CitaController extends Controller
 
         $data3 = DB::select("CALL sp_select_persona('doctores',0);");
 
-        return view("/citas/{$vista}", compact('heads', 'data', 'data2', 'data3'));
+        return view("/citas/agenda", compact('heads', 'data', 'data2', 'data3'));
+    }
+
+    public function CreateCita(Request $request){
+        Http::post("http://localhost:3000/citas", [
+            'paciente' => $request->paciente,
+            'doctor' => $request->doctor,
+            'fechaInicio' => $request->fechaInicio,
+            'fechaFinal' => $request->fechaFinal,
+            'horaInicio' => $request->horaInicio,
+            'horaFinal' => $request->horaFinal,
+            'estado' => $request->estado,
+            'tipo' => $request->tipo,
+            'descripcion' => $request->descripcion,
+        ]);
+
+        return redirect()->route('citas')->with('create', 'ok');
+    }
+
+    public function GetCita($cod){
+        $data = Http::get("http://localhost:3000/citas/$cod");
+        return response()->json($data[0]);
+    }
+
+    public function UpdateCita(Request $request){
+        Http::put("http://localhost:3000/citas/$request->codigo", [
+            'paciente' => $request->paciente,
+            'doctor' => $request->doctor,
+            'fechaInicio' => $request->fechaInicio,
+            'fechaFinal' => $request->fechaFinal,
+            'horaInicio' => $request->horaInicio,
+            'horaFinal' => $request->horaFinal,
+            'estado' => $request->estado,
+            'tipo' => $request->tipo,
+            'descripcion' => $request->descripcion,
+        ]);
+
+        return redirect()->route('citas')->with('update', 'ok');
+    }
+
+    public function DeleteCita(Request $request){
+        Http::delete("http://localhost:3000/citas/$request->codigo");
+
+        return redirect()->route('citas')->with('delete', 'ok');
     }
 }
