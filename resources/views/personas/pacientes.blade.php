@@ -34,31 +34,34 @@
 
       <section class="card-body">
         <x-adminlte-datatable id="tablaPacientes" :heads="$heads" theme="light" striped hoverable beautify bordered compressed with-buttons>
-          @foreach($data as $row)
+          @if (!empty($data1))
+            @foreach($data1 as $row)
               <tr>
-                  <td>{!! $row->codigo !!}</td>
-                  <td>{!! $row->identidad !!}</td>
-                  <td>{!! $row->nombres." ".$row->apellidos !!}</td>
-                  <td>{!! $row->nacionalidad !!}</td>
-                  <td>{!! $row->edad !!}</td>
-                  <td>{!! $row->fecha_nacimiento !!}</td>
-                  <td>{!! $row->sexo !!}</td>
-                  <td>{!! $row->estado_civil !!}</td>
-                  <td>
-                    <nobr>
-                      <a class="btn btn-xs btn-primary text-white mx-1 shadow" title="Editar">
-                        <i class="fa fa-lg fa-fw fa-pen"></i>
-                      </a>
-                      <a class="btn btn-xs btn-danger text-white mx-1 shadow" title="Eliminar">
+                <td>{!! $row->codigo !!}</td>
+                <td>{!! "0".substr($row->identidad,0,3)."-".substr($row->identidad,3,4)."-".substr($row->identidad,7) !!}</td>
+                <td>{!! $row->nombres." ".$row->apellidos !!}</td>
+                <td>{!! $row->nacionalidad !!}</td>
+                <td>{!! $row->edad !!}</td>
+                <td>{!! $row->fecha_nacimiento !!}</td>
+                <td>{!! $row->sexo !!}</td>
+                <td>{!! $row->estado_civil !!}</td>
+                <td>
+                  <nobr>
+                    <form class="d-inline-block formElimnar" action="{{route('deletePersona', ['pacientes',$row->codigo])}}" method="post">
+                      {!! csrf_field() !!}
+                      @method('delete')
+                      <button class="btn btn-xs btn-danger text-white mx-1 shadow btnEliminar" title="Eliminar">
                         <i class="fa fa-lg fa-fw fa-trash"></i>
-                      </a>
-                      <a href="{{route('detalle', $row->codigo)}}" class="btn btn-xs btn-default bg-teal text-white mx-1 shadow" title="Detalles">
-                        <i class="fa fa-lg fa-fw fa-eye"></i>
-                      </a>
-                    </nobr>
-                  </td>
+                      </button>
+                    </form>
+                    <a href="{{route('detallePaciente', $row->codigo)}}" class="btn btn-xs btn-default bg-teal text-white mx-1 shadow" title="Detalles">
+                      <i class="fa fa-lg fa-fw fa-eye"></i>
+                    </a>
+                  </nobr>
+                </td>
               </tr>
-          @endforeach
+            @endforeach
+          @endif
         </x-adminlte-datatable>
       </section>
     </div>
@@ -66,7 +69,7 @@
 
 @section('content')
     {{-- Modal - Nuevo Paciente --}}
-    <form action="{{route('nuevaPersona', 'pacientes')}}" method="post">
+    <form action="{{route('nuevaPersona', 'pacientes')}}" method="post" id="nuevaPersona">
       @csrf
       {{-- Custom --}}
       <x-adminlte-modal id="modalPacientes" title="Registrar Paciente" size="lg" theme="teal"
@@ -196,8 +199,8 @@
           <div class="row g-2">
             <div class="col-md">
               <div class="form-floating">
-                <input type="email" class="form-control" id="email" name="correo" placeholder="example@example.com" required>
-                <label for="email">Correo Electrónico</label>
+                <input type="email" class="form-control" id="email" name="correo" placeholder="example@example.com" >
+                <label for="email">Correo Electrónico (Opcional)</label>
               </div>
             </div>
             <div class="col-md"></div>
@@ -213,5 +216,81 @@
 
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+    <script>
+      let formCreate = document.getElementById("nuevaPersona");
+      let fomrsEliminar = document.querySelectorAll(".formElimnar");
+      let data = {!! json_encode($data1) !!};
+      
+      formCreate.addEventListener('submit', e =>{
+        e.preventDefault();
+        let ok = true;
+        for (let el of data){
+          if(formCreate[2].value == '0'+el.identidad){
+            ok = false;
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'warning',
+              iconColor: '#FFD700',
+              title: '¡La identidad que trata de ingresar ya existes!',
+              showConfirmButton: false,
+              timer: 7000,  
+            });
+          }
+        }
+        if (ok) formCreate.submit();
+      });
+      
+      fomrsEliminar.forEach(el => {
+        el.addEventListener('submit', e =>{
+          e.preventDefault();
+          Swal.fire({
+            title: '¿Estás seguro/a?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '¡Si, eliminar!',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              el.submit();
+            }
+          });
+        });
+      })
+    </script>
+
+    @if (session('create') == 'ok')
+      <script>
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: '¡El Paciente se creo con éxito!',
+          background: '#00a135',
+          color: '#fff',
+          iconColor: '#fff', 
+          showConfirmButton: false,
+          timer: 3200,  
+        })
+      </script>
+    @endif
+
+    @if(session('delete') == 'ok')
+      <script>
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'El paciente se elimino con éxito.',
+          background: '#00a135',
+          color: '#fff',
+          iconColor: '#fff', 
+          showConfirmButton: false,
+          timer: 3200,  
+        })
+      </script>
+    @endif
 @stop

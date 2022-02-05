@@ -34,7 +34,7 @@
 
       <section class="card-body">
         <x-adminlte-datatable id="tablaEmpleados" :heads="$heads" theme="light" striped hoverable beautify bordered compressed with-buttons>
-          @foreach($data as $row)
+          @foreach($data2 as $row)
               <tr>
                   <td>{!! $row->codigo !!}</td>
                   <td>{!! $row->identidad !!}</td>
@@ -66,7 +66,7 @@
 
 @section('content')
     {{-- Modal - Nuevo Empleado --}}
-    <form action="{{route('nuevaPersona', 'empleados')}}" method="post">
+    <form action="{{route('nuevaPersona', 'empleados')}}" method="post" id="nuevaPersona">
       @csrf
       {{-- Custom --}}
       <x-adminlte-modal id="modalPacientes" title="Registrar Paciente" size="lg" theme="teal"
@@ -213,5 +213,28 @@
 
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+    <script>
+      let formCreate = document.getElementById("nuevaPersona");
+      let data = {!! json_encode($data2) !!};
+
+      formCreate.addEventListener('submit', e =>{
+        e.preventDefault();
+        let ok = true;
+        for (let el of data){
+          if(formCreate[2].value == '0'+el.identidad){
+            ok = false;
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'warning',
+              iconColor: '#FFD700',
+              title: '¡La identidad que trata de ingresar ya existes!',
+              showConfirmButton: false,
+              timer: 7000,  
+            });
+          }
+        }
+        if (ok) formCreate.submit();
+      });
+    </script>
 @stop

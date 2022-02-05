@@ -14,8 +14,8 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
-    'title_prefix' => '',
+    'title' => 'Clínica San Juan',
+    'title_prefix' => 'Clínica | ',
     'title_postfix' => '',
 
     /*
@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'use_ico_only' => false,
+    'use_ico_only' => true,
     'use_full_favicon' => false,
 
     /*
@@ -45,9 +45,9 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo' => '<b>Clínica</b> San Juan',
+    'logo_img' => 'vendor/adminlte/dist/img/LogoA.png',
+    'logo_img_class' => 'brand-image img-circle-1 elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'AdminLTE',
@@ -250,34 +250,29 @@ return [
         [
             'text'    => 'Personas',
             'icon'    => 'fas fa-fw fa-users',
-            'submenu' => [
-                [
-                    'text'  => 'Pacientes',
-                    'icon'    => 'fas fa-fw fa-user',
-                    'url'   => '/personas/pacientes'
-                ],
-                [
-                    'text'  => 'Empleados',
-                    'icon'    => 'fas fa-fw fa-user-md',
-                    'url'   => '/personas/empleados',
-                ],
-            ],
+            'url'   => '/personas',
+            // 'submenu' => [
+            //     [
+            //         'text'  => 'Pacientes',
+            //         'icon'    => 'fas fa-fw fa-user',
+            //         'url'   => '/personas/pacientes'
+            //     ],
+            //     [
+            //         'text'  => 'Empleados',
+            //         'icon'    => 'fas fa-fw fa-user-md',
+            //         'url'   => '/personas/empleados',
+            //     ],
+            //     [
+            //         'text'  => 'Registros',
+            //         'icon'    => 'fas fa-fw fa-user-md',
+            //         'url'   => '/personas',
+            //     ],
+            // ],
         ],
         [
-            'text'    => 'Control de Citas',
-            'icon'    => 'fas fa-fw fa-clipboard-list',
-            'submenu' => [
-                [
-                    'text'  => 'Agenda',
-                    'icon'    => 'fas fa-fw fa-calendar-alt',
-                    'url'   => '/citas/agenda'
-                ],
-                [
-                    'text'  => 'Registros',
-                    'icon'    => 'fas fa-fw fa-book-open',
-                    'url'   => '/citas/registros',
-                ],
-            ],
+            'text' => 'Control de Citas',
+            'icon' => 'fas fa-fw fa-clipboard-list',
+            'url'  => '/citas/agenda',
         ],
         [
             'text' => 'Horario',
@@ -517,16 +512,16 @@ return [
             ],
         ],
         'BootstrapSelect' => [
-        'active' => true,
+        'active' => false,
         'files' => [
                 [
                     'type' => 'js',
-                    'asset' => true,
+                    'asset' => false,
                     'location' => 'vendor/bootstrap-select/dist/js/bootstrap-select.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => true,
+                    'asset' => false,
                     'location' => 'vendor/bootstrap-select/dist/css/bootstrap-select.min.css',
                 ],
             ],
@@ -598,7 +593,7 @@ return [
             ],
         ],
         'Pace' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'css',
@@ -609,6 +604,37 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'FullCalendar' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '//cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '//cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '//cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js',
+                ],
+            ],
+        ],
+        'axios' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '//cdn.jsdelivr.net/npm/axios/dist/axios.min.js
+                    ',
                 ],
             ],
         ],

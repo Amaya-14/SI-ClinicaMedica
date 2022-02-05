@@ -22,7 +22,7 @@ class RotacionController extends Controller
 
         $data = Http::get("http://localhost:3000/rotaciones")->object();
 
-        $data2 = Http::get("http://localhost:3000/empleados")->object();
+        $data2 = Http::get("http://localhost:3000/doctores")->object();
 
         $count = 1;
 
@@ -47,7 +47,7 @@ class RotacionController extends Controller
     public function UpdateRotacion(Request $request, $cod){
 
         Http::put("http://localhost:3000/rotacion/$request->rotacion", [
-            'empleado' => $request->codigo,
+            'empleado' => $request->empleado,
             'dias' => $request->dias,
             'entrada' => $request->entrada,
             'salida' => $request->salida,

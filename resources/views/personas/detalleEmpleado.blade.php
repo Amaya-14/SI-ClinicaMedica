@@ -1,126 +1,172 @@
 @extends('adminlte::page')
 
-@section('title', 'Paciente')
+@section('title', 'Empleado')
 
 @section('css')
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <style>
+    .item-img{
+      width:100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .add-img{
+      cursor: pointer;
+      text-decoration: underline;
+      color: blue;
+      margin: 0;
+    }
+  </style>
 @stop
 
 @section('content_header')
+  <!--  -->
+  <x-adminlte-card theme="lightblue" theme-mode="outline">
     @foreach ($data as $row )
-      <x-adminlte-profile-widget name="{!! $row->nombres.' '.$row->apellidos !!}" desc="Paciente" theme="teal" img="https://picsum.photos/id/1/100" layout-type="classic">
-        <!-- <section class="d-flex justify-content-between">
-          <a href="{{route('mostrarPersonas')}}" class="btn btn-outline-primary">Volver</a>
-        </section> -->
+      <form action="{{route('updatePersona', 'empleado')}}" method="post">
+        {!! csrf_field() !!}
+        @method('put')
 
-        <form action="{{route('updatePersona', 'paciente')}}" method="post">
-          {!! csrf_field() !!}
-          @method('put')
-          {{-- Fila 1 --}}
-          <section class="row g-2 m-auto">
-            <div class="d-flex justify-content-between">
-              <h4 class="mt-2 mr-0 mb-0 ml-2">Datos Generales</h4>
-              <div class="d-flex justify-content-end ">
-                <a class="btn text-black btnEditar editar1" >
-                  <i class="fa fa-lg fa-fw fa-edit editar1" title="Editar" id="editar1"></i>
-                </a>
-                <button type="submit" class="btn text-black hidden hidden1 d-none" title="Guardar" id="guardar1">
-                  <i class="fa fa-lg fa-fw fa-save"></i>
-                </button>
-                <a class="btn text-black hidden btnCerrar cerrar1 d-none" title="Cancelar" id="cancelar1">
-                  <i class="fa fa-lg fa-fw fa-times"></i>
-                </a>
-              </div>  
+        {{-- Fila 0 --}}
+        <div class="row g-2">
+          <div class="col-md mb-3 d-flex flex-column justify-content-around align-items-center content-img">
+            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" class="item-img" alt="persona">
+            <p class="add-img d-none">Cambiar foto</p>
+            <div class="d-none">
+              <div class="form-floating">
+                <input class="input-file form-control" type="file" accept="image/png, image/gif, image/jpeg" name="foto" id="foto">
+                <label for="foto">Foto</label>
+              </div>
             </div>
-          </section>
-
-          <div>
-            <hr class="mt-0 mb-1 mr-0 ml-0">
           </div>
-          
-          {{-- Fila 2 --}}
-          <section class="row g-2 m-auto">
-            <div class="col-sm-3">
-              <div class="form-floating mb-2">
-                <input type="text" class="form-control inputGeneral" id="identidad" name="identidad" value="{!! "0".$row->identidad !!}" placeholder="" required disabled>
-                <label for="identidad">Número de Identidad</label>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-floating mb-2">
-                <input type="text" class="form-control inputGeneral" id="nacionalidad" name="nacionalidad" value="{!! $row->nacionalidad !!}" required disabled>
-                <label for="nacionalidad">Nacionalidad</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating mb-2">
-                <input type="text" class="form-control inputGeneral" id="lastname" name="apellidos" value="{!! $row->apellidos !!}" placeholder="" required disabled>
-                <label for="lastname">Apellidos</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating mb-2">
-                <input type="text" class="form-control inputGeneral" id="name" name="nombres" value="{!! $row->nombres !!}" required disabled>
-                <label for="name">Nombres</label>
-              </div>
-            </div>
-          </section>
+        </div>
 
-          {{-- Fila 3 --}}
-          <section class="row g-2 m-auto">
-            <div class="col-sm-2">
+        {{-- Fila 1 --}}
+        <section class="row g-2 m-auto">
+          <div class="d-flex justify-content-between">
+            <h4 class="mt-2 mr-0 mb-0 ml-2">Datos Generales</h4>
+            <div class="d-flex justify-content-end ">
+              <a class="btn text-black btnEditar editar1" >
+                <i class="fa fa-lg fa-fw fa-edit editar1" title="Editar" id="editar1"></i>
+              </a>
+              <button type="submit" class="btn text-black hidden hidden1 d-none" title="Guardar" id="guardar1">
+                <i class="fa fa-lg fa-fw fa-save"></i>
+              </button>
+              <a class="btn text-black hidden btnCerrar cerrar1 d-none" title="Cancelar" id="cancelar1">
+                <i class="fa fa-lg fa-fw fa-times"></i>
+              </a>
+            </div>  
+          </div>
+        </section>
+  
+        <div>
+          <hr class="mt-0 mb-1 mr-0 ml-0">
+        </div>
+        
+        {{-- Fila 2 --}}
+        <section class="row g-2 m-auto">
+          <div class="col-sm-3">
+            <div class="form-floating mb-2">
+              <input type="text" class="form-control inputGeneral" id="identidad" name="identidad" value="{!! "0".$row->identidad !!}" placeholder="" required disabled>
+              <label for="identidad">Número de Identidad</label>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-floating mb-2">
+              <input type="text" class="form-control inputGeneral" id="nacionalidad" name="nacionalidad" value="{!! $row->nacionalidad !!}" required disabled>
+              <label for="nacionalidad">Nacionalidad</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating mb-2">
+              <input type="text" class="form-control inputGeneral" id="lastname" name="apellidos" value="{!! $row->apellidos !!}" placeholder="" required disabled>
+              <label for="lastname">Apellidos</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating mb-2">
+              <input type="text" class="form-control inputGeneral" id="name" name="nombres" value="{!! $row->nombres !!}" required disabled>
+              <label for="name">Nombres</label>
+            </div>
+          </div>
+        </section>
+  
+        {{-- Fila 3 --}}
+        <section class="row g-2 m-auto">
+          <div class="col-sm-2">
+            <div class="form-floating mb-2">
+              <select class="form-select inputGeneral" id="sexo" name="sexo" required disabled>
+                <option selected disabled value="{!! substr($row->sexo,0,1) !!}">{!! $row->sexo !!}</option>
+                <option value="H">Hombre</option>
+                <option value="M">Mujer</option>
+              </select>
+              <label for="sexo">Sexo</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating mb-2">
+              <input type="date" class="form-control inputGeneral" id="fechaNacimiento" name="fechaNacimiento" value="{!! $row->fecha !!}" required disabled>
+              <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating mb-2">
+              <input type="number" class="form-control inputGeneral" id="edad" name="edad" value="{!! $row->edad !!}" required disabled>
+              <label for="edad">Edad</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating mb-2">
+              <select class="form-select inputGeneral" id="estadoCivil" name="estadoCivil" required disabled>
+                <option selected disabled value="{!! substr($row->estado_civil,0,1) !!}">{!! $row->estado_civil !!}</option>
+                <option value="S">Soltero</option>
+                <option value="C">Casado</option>
+                <option value="D">Divorciado</option>
+                <option value="V">Viudo/a</option>
+              </select>
+              <label for="estadoCivil">Estado Civil</label>
+            </div>
+          </div>
+          <div class="row g-2 m-auto">
+            <div class="col-md d-none">
               <div class="form-floating mb-2">
-                <select class="form-select inputGeneral" id="sexo" name="sexo" required disabled>
-                  <option selected disabled value="{!! substr($row->sexo,0,1) !!}">{!! $row->sexo !!}</option>
-                  <option value="H">Hombre</option>
-                  <option value="M">Mujer</option>
+                <input type="number" class="form-control inputGeneral" id="codigo" name="codigo" value="{!! $row->codigoP !!}" required disabled>
+                <label for="codigo">Codigo</label>
+              </div>
+            </div>
+            <div class="col-md d-none">
+              <div class="form-floating mb-2">
+                <input type="number" class="form-control inputGeneral" id="persona" name="persona" value="{!! $row->codigo !!}" required disabled>
+                <label for="persona">Persona</label>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating mb-2">
+                <select class="form-select inputGeneral" id="cargo" name="cargo" required disabled>
+                  <option selected disabled value="">Seleccione</option>
+                  @foreach($data5 as $fila)
+                    <option value="{!! $fila->codigo !!}">{!! $fila->nombre !!}</option>
+                  @endforeach
                 </select>
-                <label for="sexo">Sexo</label>
+                <label for="cargo">Puesto</label>
               </div>
             </div>
             <div class="col-md">
               <div class="form-floating mb-2">
-                <input type="date" class="form-control inputGeneral" id="fechaNacimiento" name="fechaNacimiento" value="{!! $row->fecha !!}" required disabled>
-                <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                <input type="date" class="form-control inputGeneral" id="fechaContratacion" name="fechaContratacion" value="{!! $row->fechaContratacion !!}" placeholder="" required disabled>
+                <label for="fechaContratacion">Fecha de Contratación</label>
               </div>
             </div>
-            <div class="col-md">
-              <div class="form-floating mb-2">
-                <input type="number" class="form-control inputGeneral" id="edad" name="edad" value="{!! $row->edad !!}" required disabled>
-                <label for="edad">Edad</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating mb-2">
-                <select class="form-select inputGeneral" id="estadoCivil" name="estadoCivil" required disabled>
-                  <option selected disabled value="{!! substr($row->estado_civil,0,1) !!}">{!! $row->estado_civil !!}</option>
-                  <option value="S">Soltero</option>
-                  <option value="C">Casado</option>
-                  <option value="D">Divorciado</option>
-                  <option value="V">Viudo/a</option>
-                </select>
-                <label for="estadoCivil">Estado Civil</label>
-              </div>
-            </div>
-            <div class="row g-2">
-              <div class="col-md d-none">
-                <div class="form-floating mb-2">
-                  <input type="number" class="form-control inputGeneral" id="codigo" name="codigo" value="{!! $row->codigoP !!}" required disabled>
-                  <label for="codigo">Codigo</label>
-                </div>
-              </div>
-              <div class="col-md d-none">
-                <div class="form-floating mb-2">
-                  <input type="number" class="form-control inputGeneral" id="persona" name="persona" value="{!! $row->codigo !!}" required disabled>
-                  <label for="persona">Persona</label>
-                </div>
-              </div>
-            </div>
-          </section>
-        </form>        
-      </x-adminlte-profile-widget>
+          </div>
+        </section>
+      </form>  
     @endforeach
-    
+  </x-adminlte-card>
+
+  <!--  -->
   <x-adminlte-card title="Teléfonos" theme="lightblue" theme-mode="outline" icon="fas fa-lg fa-phone-alt" collapsible="collap">
     @if (!empty($data2))
       <section class="row g-2 m-auto">
@@ -152,6 +198,7 @@
     @endif
   </x-adminlte-card>
 
+  <!--  -->
   <x-adminlte-card title="Direcciones" theme="lightblue" theme-mode="outline" icon="fas fa-lg fa-map-marked-alt" collapsible="collap">
     @if (!empty($data3))
       <section class="row g-2 m-auto">
@@ -181,6 +228,7 @@
     @endif
   </x-adminlte-card>
 
+  <!--  -->
   <x-adminlte-card title="Correos" theme="lightblue" theme-mode="outline" icon="fas fa-lg fa-envelope" collapsible="collap">
     @if (!empty($data4))
       <section class="row g-2 m-auto">
@@ -370,6 +418,7 @@
   </form>
 @stop
 
+
 @section('js')
   <script>
     $(document).ready(function() {
@@ -382,7 +431,20 @@
       let inputsCorreo = document.querySelectorAll(".inputCorreo");
       let btnsEliminar = document.querySelectorAll(".btnEliminar");
       let formsDelete = document.querySelectorAll(".formDelete");
-      console.log(btnsEliminar);
+      let data = {!! json_encode($data[0]) !!}
+      let addImg = document.querySelector(".add-img");
+      let inputFile = document.querySelector(".input-file");
+
+      // Dar evento al input file cuando se da click en el texto
+      addImg.addEventListener('click', e => { 
+        inputFile.click();
+      });
+
+      //
+      for (let i = 0; i < inputsGeneral[10].options.length; i++){
+        if (inputsGeneral[10].options[i].innerHTML == data.cargo) inputsGeneral[10].options[i].selected = true;
+      }
+
       //
       btnsEditar.forEach(el => {
         el.addEventListener("click", e => {
@@ -390,6 +452,7 @@
             btnsHidden[0].classList.remove('d-none');
             btnsHidden[1].classList.remove('d-none');
             inputsGeneral.forEach(el => el.disabled = false);
+            addImg.classList.remove('d-none');
             el.classList.add('d-none');
           }
 
@@ -468,6 +531,7 @@
           if (el.classList.contains('cerrar1')){
             btnsHidden[0].classList.add('d-none');
             btnsHidden[1].classList.add('d-none');
+            addImg.classList.add('d-none');
             btnsEditar[0].classList.remove('d-none');
             inputsGeneral.forEach(el => el.disabled = true);
             //inputsGeneral[0].value = {!! old('identidad') !!};

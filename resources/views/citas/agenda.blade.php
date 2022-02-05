@@ -269,6 +269,7 @@
           axios.get("http://localhost/ClinicaMedica/public/cita/get/"+info.event.extendedProps.codigo).
           then(
             (respuesta)=>{
+              console.log(respuesta);
               let edit = respuesta.data;
               for (let item of formUpdate.paciente.options) {
                 if(item.innerHTML == edit.title) item.selected = true;
@@ -352,9 +353,7 @@
         position: 'top-end',
         icon: 'success',
         title: '¡Cita Agregada!',
-        background: '#00a135',
-        color: '#fff',
-        iconColor: '#fff', 
+        iconColor: '#00a135', 
         showConfirmButton: false,
         timer: 3200,  
       })
@@ -368,9 +367,7 @@
         position: 'top-end',
         icon: 'success',
         title: '¡Cita Actualizada!',
-        background: '#00a135',
-        color: '#fff',
-        iconColor: '#fff', 
+        iconColor: '#00a135', 
         showConfirmButton: false,
         timer: 3200,  
       })
@@ -384,9 +381,7 @@
         position: 'top-end',
         icon: 'success',
         title: 'El registro se elimino con éxito.',
-        background: '#00a135',
-        color: '#fff',
-        iconColor: '#fff', 
+        iconColor: '#00a135', 
         showConfirmButton: false,
         timer: 3200,  
       })

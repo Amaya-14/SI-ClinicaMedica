@@ -10,28 +10,31 @@ class AlmacenController extends Controller
     public function ShowProductos(){
 
         $heads1 = [
-            'CODIGO',
-            'NOMBRE',
-            'PRESENTACIÓN',
-            'TIPO',
+            '#',
+            'Nombre',
+            'Presentación',
+            'Tipo',
             ['label' => 'OPCIONES', 'no-export' => true, 'width' => 15],
         ];
 
         $medicamentos = Http::get("http://localhost:3000/medicamentos")->object();
         $presentaciones = Http::get("http://localhost:3000/upresentacion")->object();
         $tipoMedicamentos = Http::get("http://localhost:3000/tipmedicamentos")->object();
+        $count1 = 1;
 
         $heads2 = [
-            'CODIGO',
-            'NOMBRE',
-            'TIPO',
-            ['label' => 'OPCIONES', 'no-export' => true, 'width' => 15],
+            '#',
+            'Nombre',
+            'Tipo',
+            'Descipción',
+            ['label' => 'Opciones', 'no-export' => true, 'width' => 15],
         ];
 
         $materiales = Http::get("http://localhost:3000/materiales")->object();
         $tipoMateriales = Http::get("http://localhost:3000/tipmaterial")->object();
+        $count2 = 1;
 
-        return view("/almacen/productos", compact('heads1', 'medicamentos', 'presentaciones', 'tipoMedicamentos','heads2', 'materiales', 'tipoMateriales'));
+        return view("/almacen/productos", compact('heads1', 'medicamentos', 'presentaciones', 'tipoMedicamentos', 'count1','heads2', 'materiales', 'tipoMateriales', 'count2'));
     }
 
     public function CreateProducto(Request $request, $str){
@@ -45,6 +48,68 @@ class AlmacenController extends Controller
 
         return redirect()->route('productos');
     }
+
+    public function UpdateProducto(Request $request, $str){
+
+        if($str == 'medicamentos'){
+            Http::put("http://localhost:3000/medicamentos/$request->codigoMe", [
+                'nombre' => $request->nombre,
+                'presentacion' => $request->presentacion,
+                'tipo' => $request->tipo,
+                'descripcion' => $request->descripcion,
+            ]);
+        }
+
+        if($str == 'materiales'){
+            Http::put("http://localhost:3000/materiales/$request->codigoMa", [
+                'nombre' => $request->nombre,
+                'tipo' => $request->tipo,
+                'descripcion' => $request->descripcion,
+            ]);
+        }
+
+            return redirect()->route('productos');
+    }
+
+    public function DeleteProducto($str, $cod){
+
+        Http::delete("http://localhost:3000/almacen/$str/$cod");
+
+        return redirect()->route('productos')->with('eliminar', 'ok');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function ShowInfoProducto($str, $cod){
         $heads = [
@@ -61,14 +126,6 @@ class AlmacenController extends Controller
         $inventario = Http::get("http://localhost:3000/{$str}/{$cod}")->object();
 
         return view("/almacen/detalle", compact('heads', 'producto', 'inventario'));
-    }
-
-
-    public function GetMedicamento($cod){
-        $open = 'show';
-        $medicamento = Http::get("http://localhost:3000/medicamentos/{$cod}")->object();
-        var_dump($medicamento);
-        return redirect()->route("productos", compact('medicamento', 'open'));
     }
 
 

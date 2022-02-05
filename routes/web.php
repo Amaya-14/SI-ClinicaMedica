@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
+use App\Providers\RouteServiceProvider;
+use App\Http\Controllers\Controller;
 
 /* Controladores de los modulos */
 use App\Http\Controllers\PersonaController;
@@ -30,22 +33,43 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-
 /* módulo personas */
-Route::get('/personas/{vista}', [PersonaController::class, 'ShowPersona'])->name('registros');
+Route::get('/personas', [PersonaController::class, 'ShowPersona'])->name('mostrarPersonas');
 
-Route::get('/personas/detallePaciente/{id}', [PersonaController::class, 'ShowDetalle'])->name('detalle');
+Route::get('/personas/{vista}/{id}', [PersonaController::class, 'ShowDetalle'])->name('detallePersona');
 
-Route::post('/persona/{vista}', [PersonaController::class, 'CreatePersona'])->name('nuevaPersona');
+Route::post('/persona/create', [PersonaController::class, 'CreatePersona'])->name('nuevaPersona');
 
-Route::put('/persona/{str}/{cod}', [PersonaController::class, 'UpadatePersona'])->name('updatePersonas');
+Route::put('/persona/update/{str}', [PersonaController::class, 'UpadatePersona'])->name('updatePersona');
+
+Route::get('/persona/registro/get/{str}/{cod}', [PersonaController::class, 'GetRegistro'])->name('getRegistro');
+Route::put('/persona/registro/update/{str}', [PersonaController::class, 'UpdateRegistros'])->name('updateRegistros');
+
+Route::delete('/persona/delete/{str}/{cod}', [PersonaController::class, 'deletePersona'])->name('deletePersona');
+Route::delete('/persona/registro/delete/{str}/{cod}/{p}', [PersonaController::class, 'DeleteRegistro'])->name('deleteRegistros');
+
+
+
 
 
 
 
 
 /* módulo citas */
-Route::get('/citas/{vista}', [CitaController::class, 'ShowCita'])->name('cita');
+Route::get('/citas/agenda', [CitaController::class, 'ShowCita'])->name('citas');
+
+Route::post('/cita/create', [CitaController::class, 'CreateCita'])->name('createCitas');
+
+Route::get('/cita/get/{cod}', [CitaController::class, 'GetCita'])->name('getCita');
+
+Route::put('/cita/update', [CitaController::class, 'UpdateCita'])->name('updateCitas');
+
+Route::delete('/cita/delete', [CitaController::class, 'DeleteCita'])->name('deleteCita');
+
+
+
+
+
 
 
 
@@ -77,13 +101,24 @@ Route::delete('/rotacion/personal/{cod}', [RotacionController::class, 'DeleteRot
 /* módulo inventario */
 Route::get('/almacen/productos', [AlmacenController::class, 'ShowProductos'])->name('productos');
 
+Route::post('/almacen/{str}', [AlmacenController::class, 'CreateProducto'])->name('nuevoProducto');
+
+Route::put('/almacen/{str}', [AlmacenController::class, 'UpdateProducto'])->name('updateProducto');
+
+Route::delete('/almacen/{str}/{cod}', [AlmacenController::class, 'DeleteProducto'])->name('deleteProducto');
+
+
+
+
+
+
+
 Route::get('/almacen/{str}/{cod}', [AlmacenController::class, 'ShowInfoProducto'])->name('infoProducto');
 
 Route::get('/almacen/inventarios', [AlmacenController::class, 'ShowInventario'])->name('inventario');
 
-Route::post('/almacen/{str}', [AlmacenController::class, 'CreateProducto'])->name('nuevoProducto');
 
-Route::get('/almacen/producto/medicamentos/{cod}', [AlmacenController::class, 'GetMedicamento'])->name('getMedicamento');
+
 
 
 
@@ -93,4 +128,13 @@ Route::get('/almacen/producto/medicamentos/{cod}', [AlmacenController::class, 'G
 
 
 /* módulo caja y factura*/
-Route::get('/caja/cajaChica', [CajaFacturaController::class, 'ShowCaja'])->name('Caja');
+Route::get('/caja/cajaChica', [CajaFacturaController::class, 'ShowCaja'])->name('CajaChica');
+Route::get('/caja/movimientos', [CajaFacturaController::class, 'getMovimientos'])->name('movimientos');
+
+Route::post('/cajaChica/{str}', [CajaFacturaController::class, 'CreateCF'])->name('nuevoRegistro');
+
+Route::put('/cajaChica/{str}', [CajaFacturaController::class, 'UpdateRegistro'])->name('updateRegistro');
+
+Route::delete('/cajaChica/borrar/{cod}', [CajaFacturaController::class, 'DeleteRegistro'])->name('borrarRegistro');
+
+

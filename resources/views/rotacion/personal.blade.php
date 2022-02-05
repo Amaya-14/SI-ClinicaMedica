@@ -81,7 +81,7 @@
           <div class="col-md">
             <div class="form-floating mb-3">
               <select class="form-select" id="empleado" name="codigo" required>
-                <option selected disabled value="">Seleccione</option>
+                <option selected disabled>Seleccione</option>
                 @foreach($data2 as $row)
                   <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
                 @endforeach
@@ -120,7 +120,7 @@
           <div class="col-md">
             <div class="form-floating mb-3">
               <select class="form-select" id="jornada" name="jornada" required>
-                <option selected disabled value="">Seleccione</option>
+                <option selected disabled>Seleccione</option>
                 <option value="M">Matutina</option>
                 <option value="V">Vespertina</option>
                 <option value="N">Nocturna</option>
@@ -154,7 +154,7 @@
   </form>
 
   <!-- Formulario para actulizar un registro -->
-  <form action="{{route('updateRotacion', 7)}}" method="post">
+  <form action="{{route('updateRotacion', 1)}}" method="post">
     @csrf
     @method('put')
     
@@ -165,7 +165,7 @@
         <div class="row g-2">
           <div class="col-md">
             <div class="form-floating mb-3">
-              <select class="form-select inputUpdate" id="empleado" name="codigo" disabled required>
+              <select class="form-select inputUpdate" id="empleado" name="empleado" disabled required>
                 </option>
                 @foreach($data2 as $row)
                   <option value="{!! $row->codigo !!}">{!! $row->nombres." ".$row->apellidos !!}</option>
@@ -205,7 +205,7 @@
           <div class="col-md">
             <div class="form-floating mb-3">
               <select class="form-select inputUpdate" id="jornada" name="jornada" disabled required>
-                <option selected disabled value="">Seleccione</option>
+                <option selected disabled>Seleccione</option>
                 <option value="M">Matutina</option>
                 <option value="V">Vespertina</option>
                 <option value="N">Nocturna</option>
@@ -256,13 +256,14 @@
       let inputsU = document.querySelectorAll(".inputUpdate");
       let btnEditar = document.getElementById('btnEditar');
       let btnHiden = document.querySelectorAll(".btnHidden");
-      
+      let data = {!! json_encode($data) !!};
+      console.log(data);
       //
       buttons.forEach(el => {
         el.addEventListener("click", e => {
           let id = e.target.getAttribute('id');
           id = id -2;          
-          let data = {!! json_encode($data) !!};
+
           inputsU[0].options[0].innerHTML = data[id].empleado;
           inputsU[0].options[0].value = data[id].codEmpleado;
           inputsU[1].options[0].innerHTML = data[id].dias;
@@ -274,6 +275,7 @@
           inputsU[5].value = data[id].color;
           inputsU[6].value = data[id].descripcion;
           inputsU[7].value = data[id].codigo;
+          console.log(inputsU);
         });
       });
 
@@ -323,6 +325,7 @@
           }
         });
       });
+      
     });
   </script>
 @stop

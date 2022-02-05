@@ -4,36 +4,99 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class CajaFacturaController extends Controller
 {
     public function ShowCaja(){
 
-        /*Registro*/
+        //Cabeceras de las tablas(DataTables)
+        $heads1 = $this->heads1();
+        $heads2 = $this->heads2();
 
-        /* Caja Chica */
-        $heads1 = [
-            'Código',
-            'Fecha',
+        $data1 = Http::get("http://localhost:3000/cyf/aperturaCierre")->object();
+        $data2 = Http::get("http://localhost:3000/cyf/movimiento")->object();
+        $data3 = Http::get("http://localhost:3000/cyf/cajas")->object();
+        $count = 0;
+        $count3 = 1;
+
+        /* Factura*/
+
+        return view('/caja/cajaChica', compact('heads1', 'data1', 'heads2', 'data2', 'data3', 'count', 'count3'));
+    }
+
+    public function getMovimientos(Request $request){
+
+        //Cabeceras de las tablas(DataTables)
+        $heads1 = $this->heads1();
+        $heads2 = $this->heads2();
+
+
+        $data1 = Http::get("http://localhost:3000/cyf/aperturaCierre/$request->fechaBusqueda")->object();
+        $data2 = Http::get("http://localhost:3000/cyf/movimiento/$request->fechaBusqueda")->object();
+        $data3 = Http::get("http://localhost:3000/cyf/cajas")->object();
+        $count = 0;
+        $count2 = 1;
+        $count3 = 1;
+        foreach ($data1 as $row){
+            $row->fechaApertura = substr($row->fechaApertura, 0, 10);
+            $row->fechaCierre = substr($row->fechaCierre, 0, 10);
+        };
+        
+
+        return view('/caja/cajaChica', compact('heads1', 'data1', 'data2', 'heads2', "data3", 'count', 'count2', 'count3' ));
+    }
+
+    public function CreateCF(Request $request, $str){
+        if($str == 'cajas'){
+            Http::post('http://localhost:3000/cyf/caja', [
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion,
+            ]);
+        }
+
+        if($str == 'apertura'){
+            Http::post('http://localhost:3000/cyf/apertura', [
+                'usuario' => $request->usuario,
+                'caja' => $request->caja,
+                'fecha' => $request->fecha,
+                'cantidad' => $request->cantidad,
+            ]);
+        }
+        return redirect()->route('CajaChica');
+    }
+
+    public function UpdateRegistro(Request $request, $cod){
+        Http::put('http://localhost:3000/cyf/caja/$request->codigo', [
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+        ]);
+    }
+
+    public function DeleteRegistro($cod){
+        Http::delete("http://localhost:3000/cyf/caja/$cod");
+        return redirect()->route('CajaChica')->with('eliminar', 'ok');
+    }
+
+
+    // Retorna un arreglo que representa las cabceras de la tabla movimientos
+    public function heads1(){
+        return [
+            '#',
+            'Factura',
             'Tipo',
             'Cantidad',
             ['label' => 'Opciones', 'no-export' => true, 'width' => 15],
         ];
+    }
 
-        $data1 = DB::select("CALL sp_select_cajaANDfactura('movimientos',0);");
-
-        /* Cajas Registradoras*/
-        $heads2 = [
+    // Retorna un arreglo que representa las cabceras de la tabla cajas
+    public function heads2(){
+        return [
             'Código',
             'Nombre',
             'Descripción',
             ['label' => 'Opciones', 'no-export' => true, 'width' => 15],
         ];
-
-        $data2 = DB::select("CALL sp_select_cajaANDfactura('cajas',0);");
-
-        /* Factura*/
-
-        return view('/caja/cajaChica', compact('heads1', 'data1', 'heads2', 'data2'));
     }
 }
