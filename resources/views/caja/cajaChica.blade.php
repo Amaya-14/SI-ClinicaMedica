@@ -328,7 +328,7 @@
           <div class="col-md">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="nombreC" name="nombre" placeholder="Nombre" required>
-              <label for="usuarioR">Nombre</label>
+              <label for="nombreC">Nombre</label>
             </div>
           </div>
         </div>
