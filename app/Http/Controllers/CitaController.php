@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 class CitaController extends Controller
 {
     public function ShowCita(){
-
+        $API = config('constants.HOST_API');
         $heads = [
             '#',
             'PACIENTE',
@@ -22,9 +22,9 @@ class CitaController extends Controller
             ['label' => 'OPCIONES', 'no-export' => true, 'width' => 15],
         ];
 
-        $data = Http::get("http://localhost:3000/citas")->object();
+        $data = Http::get("{$API}/citas")->object();
 
-        $data2 = Http::get("http://localhost:3000/pacientes")->object();
+        $data2 = Http::get("{$API}/pacientes")->object();
 
         $data3 = DB::select("CALL sp_select_persona('doctores',0);");
 
@@ -32,7 +32,8 @@ class CitaController extends Controller
     }
 
     public function CreateCita(Request $request){
-        Http::post("http://localhost:3000/citas", [
+        $API = config('constants.HOST_API');
+        Http::post("{$API}/citas", [
             'paciente' => $request->paciente,
             'doctor' => $request->doctor,
             'fechaInicio' => $request->fechaInicio,
@@ -48,12 +49,14 @@ class CitaController extends Controller
     }
 
     public function GetCita($cod){
-        $data = Http::get("http://localhost:3000/citas/$cod");
+        $API = config('constants.HOST_API');
+        $data = Http::get("{$API}/citas/$cod");
         return response()->json($data[0]);
     }
 
     public function UpdateCita(Request $request){
-        Http::put("http://localhost:3000/citas/$request->codigo", [
+        $API = config('constants.HOST_API');
+        Http::put("{$API}/citas/$request->codigo", [
             'paciente' => $request->paciente,
             'doctor' => $request->doctor,
             'fechaInicio' => $request->fechaInicio,
@@ -69,7 +72,8 @@ class CitaController extends Controller
     }
 
     public function DeleteCita(Request $request){
-        Http::delete("http://localhost:3000/citas/$request->codigo");
+        $API = config('constants.HOST_API');
+        Http::delete("{$API}/citas/$request->codigo");
 
         return redirect()->route('citas')->with('delete', 'ok');
     }

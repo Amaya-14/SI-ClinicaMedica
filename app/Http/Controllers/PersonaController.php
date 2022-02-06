@@ -24,10 +24,12 @@ class PersonaController extends Controller
             ['label' => 'Opciones', 'no-export' => true, 'width' => 10],
         ];
 
+        $API = config('constants.HOST_API');
+
         $responses = Http::pool(fn (Pool $pool) => [
-            $pool->as('pacientes')->get('http://localhost:3000/pacientes'),
-            $pool->as('empleados')->get('http://localhost:3000/empleados'),
-            $pool->as('cargos')->get('http://localhost:3000/cargos'),
+            $pool->as('pacientes')->get("{$API}/pacientes"),
+            $pool->as('empleados')->get('{$API}/empleados'),
+            $pool->as('cargos')->get('{API}cargos'),
         ]);
         
         return view("personas/registros", compact('heads', 'responses') );
@@ -53,7 +55,9 @@ class PersonaController extends Controller
             ['label' => 'Opciones', 'no-export' => true, 'width' => 15],
         ];
 
-        $data = Http::get("http://localhost:3000/{$vista}/$id")->object();
+        $API = config('constants.HOST_API');
+
+        $data = Http::get("{$API}/{$vista}/$id")->object();
 
         $data[0]->fecha = substr($data[0]->fecha, 0, 10);
         $cod = $data[0]->codigoP;
@@ -65,26 +69,26 @@ class PersonaController extends Controller
             $data[0]->fechaContratacion = substr($data[0]->fechaContratacion, 0, 10);
         } 
 
-        $data2 = Http::get("http://localhost:3000/telefonos/$cod")->object();
-        $data3 = Http::get("http://localhost:3000/direcciones/$cod")->object();
-        $data4 = Http::get("http://localhost:3000/correos/$cod")->object();
-        $data5 = Http::get("http://localhost:3000/cargos")->object();
+        $data2 = Http::get("{$API}/telefonos/$cod")->object();
+        $data3 = Http::get("{$API}/direcciones/$cod")->object();
+        $data4 = Http::get("{$API}/correos/$cod")->object();
+        $data5 = Http::get("{$API}/cargos")->object();
         $count = 0;
 
         return view("personas/{$vista}", compact('data','data2','data3','data4', 'data5','count', 'heads', 'heads2', 'heads3'));
     }
 
     public function GetRegistro($str, $cod){
-
+        $API = config('constants.HOST_API');
         switch ($str) {
             case 'telefono':
-                $data = Http::get("http://localhost:3000/telefono/$cod");
+                $data = Http::get("{$API}/telefono/$cod");
                 break;
             case 'direccion':
-                $data = Http::get("http://localhost:3000/direccion/$cod");
+                $data = Http::get("{$API}/direccion/$cod");
                 break;
             case 'correo':
-                $data = Http::get("http://localhost:3000/correo/$cod");
+                $data = Http::get("{$API}/correo/$cod");
                 break;
             default:
                 $data = [[]];
@@ -94,8 +98,8 @@ class PersonaController extends Controller
     }
 
     public function CreatePersona(Request $request){
-
-        $response = Http::post('http://localhost:3000/persona', [
+        $API = config('constants.HOST_API');
+        $response = Http::post('{$API}/persona', [
             'identidad' => $request->identidad,
             'nombres' => $request->nombres,
             'apellidos' => $request->apellidos,
@@ -129,7 +133,7 @@ class PersonaController extends Controller
 
     /*Editar un registro*/
     public function UpadatePersona(Request $request, $str){
-        
+        $API = config('constants.HOST_API');   
         if ($str == 'paciente') {;
             $registro = 'P';
             $cargo = '0';
@@ -144,7 +148,7 @@ class PersonaController extends Controller
             $fechaContratacion = $request->fechaContratacion;
         }
         
-        $response = Http::put("http://localhost:3000/persona/$request->codigo", [
+        $response = Http::put("{$API}/persona/$request->codigo", [
             'identidad' => $request->identidad,
             'nombres' => $request->nombres,
             'apellidos' => $request->apellidos,
@@ -166,10 +170,10 @@ class PersonaController extends Controller
     }
 
     public function UpdateRegistros(Request $request, $str){
-
+        $API = config('constants.HOST_API');
         switch ($str) {
             case 'telefonos':
-                $response = Http::put("http://localhost:3000/telefono/$request->codigo", [
+                $response = Http::put("{$API}/telefono/$request->codigo", [
                     'numArea' => $request->numArea,
                     'numTelefono' => $request->numTelefono,
                     'tipoTelefono' => $request->tipoTelefono,
@@ -181,14 +185,14 @@ class PersonaController extends Controller
                 /*var_dump($request->codigo);
                 var_dump($request->direccion);
                 var_dump($request->desDireccion);*/
-                $response = Http::put("http://localhost:3000/direccion/$request->codigo", [
+                $response = Http::put("{$API}/direccion/$request->codigo", [
                     'direccion' => $request->direccion,
                     'desDireccion' => $request->desDireccion,
                 ]);
                 break;
 
             case 'correos':
-                $response = Http::put("http://localhost:3000/correos/$request->codigo", [
+                $response = Http::put("{$API}/correos/$request->codigo", [
                     'corr' => $request->correo,
                 ]);
                 break;
@@ -205,12 +209,13 @@ class PersonaController extends Controller
 
     /*Eliminar un registro*/
     public function DeletePersona($str, $cod){
+        $API = config('constants.HOST_API');
         switch ($str) {
             case 'pacientes':
-                $response = Http::delete("http://localhost:3000/paciente/$cod");
+                $response = Http::delete("{$API}/paciente/$cod");
                 break;
             case 'empleados':
-                $response = Http::delete("http://localhost:3000/empleado/$cod");
+                $response = Http::delete("{$API}/empleado/$cod");
                 break;
             default:
                 # code...
@@ -223,16 +228,16 @@ class PersonaController extends Controller
     }
 
     public function DeleteRegistro($str, $cod, $p){
-
+        $API = config('constants.HOST_API');
         switch ($str) {
             case 'telefonos':
-                $response = Http::delete("http://localhost:3000/telefono/$cod");
+                $response = Http::delete("{$API}/telefono/$cod");
                 break;
             case 'direcciones':
-                $response = Http::delete("http://localhost:3000/direccion/$cod");
+                $response = Http::delete("{$API}/direccion/$cod");
                 break;
             case 'correos':
-                $response = Http::delete("http://localhost:3000/correo/$cod");
+                $response = Http::delete("{$API}/correo/$cod");
                 break;
             default:
                 # code...

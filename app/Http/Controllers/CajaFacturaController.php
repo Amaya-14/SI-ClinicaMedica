@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Http;
 class CajaFacturaController extends Controller
 {
     public function ShowCaja(){
-
+        $API = config('constants.HOST_API');
         //Cabeceras de las tablas(DataTables)
         $heads1 = $this->heads1();
         $heads2 = $this->heads2();
 
-        $data1 = Http::get("http://localhost:3000/cyf/aperturaCierre")->object();
-        $data2 = Http::get("http://localhost:3000/cyf/movimiento")->object();
-        $data3 = Http::get("http://localhost:3000/cyf/cajas")->object();
+        $data1 = Http::get("{$API}/cyf/aperturaCierre")->object();
+        $data2 = Http::get("{$API}/cyf/movimiento")->object();
+        $data3 = Http::get("{$API}/cyf/cajas")->object();
         $count = 0;
         $count3 = 1;
 
@@ -26,15 +26,15 @@ class CajaFacturaController extends Controller
     }
 
     public function getMovimientos(Request $request){
-
+        $API = config('constants.HOST_API');
         //Cabeceras de las tablas(DataTables)
         $heads1 = $this->heads1();
         $heads2 = $this->heads2();
 
 
-        $data1 = Http::get("http://localhost:3000/cyf/aperturaCierre/$request->fechaBusqueda")->object();
-        $data2 = Http::get("http://localhost:3000/cyf/movimiento/$request->fechaBusqueda")->object();
-        $data3 = Http::get("http://localhost:3000/cyf/cajas")->object();
+        $data1 = Http::get("{$API}/cyf/aperturaCierre/$request->fechaBusqueda")->object();
+        $data2 = Http::get("{$API}/cyf/movimiento/$request->fechaBusqueda")->object();
+        $data3 = Http::get("{$API}/cyf/cajas")->object();
         $count = 0;
         $count2 = 1;
         $count3 = 1;
@@ -48,15 +48,16 @@ class CajaFacturaController extends Controller
     }
 
     public function CreateCF(Request $request, $str){
+        $API = config('constants.HOST_API');
         if($str == 'cajas'){
-            Http::post('http://localhost:3000/cyf/caja', [
+            Http::post('{$API}/cyf/caja', [
                 'nombre' => $request->nombre,
                 'descripcion' => $request->descripcion,
             ]);
         }
 
         if($str == 'apertura'){
-            Http::post('http://localhost:3000/cyf/apertura', [
+            Http::post('{$API}/cyf/apertura', [
                 'usuario' => $request->usuario,
                 'caja' => $request->caja,
                 'fecha' => $request->fecha,
@@ -67,20 +68,22 @@ class CajaFacturaController extends Controller
     }
 
     public function UpdateRegistro(Request $request, $cod){
-        Http::put('http://localhost:3000/cyf/caja/$request->codigo', [
+        $API = config('constants.HOST_API');
+        Http::put('{$API}/cyf/caja/$request->codigo', [
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
         ]);
     }
 
     public function DeleteRegistro($cod){
-        Http::delete("http://localhost:3000/cyf/caja/$cod");
+        $API = config('constants.HOST_API');
+        Http::delete("{$API}/cyf/caja/$cod");
         return redirect()->route('CajaChica')->with('eliminar', 'ok');
     }
 
-
     // Retorna un arreglo que representa las cabceras de la tabla movimientos
     public function heads1(){
+        $API = config('constants.HOST_API');
         return [
             '#',
             'Factura',
@@ -92,6 +95,7 @@ class CajaFacturaController extends Controller
 
     // Retorna un arreglo que representa las cabceras de la tabla cajas
     public function heads2(){
+        $API = config('constants.HOST_API');
         return [
             'Código',
             'Nombre',

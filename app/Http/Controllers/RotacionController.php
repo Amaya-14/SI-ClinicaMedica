@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 class RotacionController extends Controller
 {
     public function ShowDistribucion(){
-
+        $API = config('constants.HOST_API');
         $heads = [
             ['label' => '#', 'no-export' => false, 'width' => 8],
             'Empleado',
@@ -20,9 +20,9 @@ class RotacionController extends Controller
             ['label' => 'Opciones', 'no-export' => true, 'width' => 15],
         ];
 
-        $data = Http::get("http://localhost:3000/rotaciones")->object();
+        $data = Http::get("{$API}/rotaciones")->object();
 
-        $data2 = Http::get("http://localhost:3000/doctores")->object();
+        $data2 = Http::get("{$API}/doctores")->object();
 
         $count = 1;
 
@@ -30,8 +30,8 @@ class RotacionController extends Controller
     }
 
     public function CreateRotacion(Request $request){
-
-        Http::post('http://localhost:3000/rotacion', [
+        $API = config('constants.HOST_API');
+        Http::post('{$API}/rotacion', [
             'codigo' => $request->codigo,
             'dias' => $request->dias,
             'entrada' => $request->entrada,
@@ -45,8 +45,8 @@ class RotacionController extends Controller
     }
 
     public function UpdateRotacion(Request $request, $cod){
-
-        Http::put("http://localhost:3000/rotacion/$request->rotacion", [
+        $API = config('constants.HOST_API');
+        Http::put("{$API}/rotacion/$request->rotacion", [
             'empleado' => $request->empleado,
             'dias' => $request->dias,
             'entrada' => $request->entrada,
@@ -60,8 +60,8 @@ class RotacionController extends Controller
     }
 
     public function DeleteRotacion($cod){
-
-        Http::delete("http://localhost:3000/rotacion/$cod");
+        $API = config('constants.HOST_API');
+        Http::delete("{$API}/rotacion/$cod");
 
         return redirect()->route('rotacion')->with('eliminar', 'ok');
     }
