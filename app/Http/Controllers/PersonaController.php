@@ -28,8 +28,8 @@ class PersonaController extends Controller
 
         $responses = Http::pool(fn (Pool $pool) => [
             $pool->as('pacientes')->get("{$API}/pacientes"),
-            $pool->as('empleados')->get('{$API}/empleados'),
-            $pool->as('cargos')->get('{API}cargos'),
+            $pool->as('empleados')->get("{$API}/empleados"),
+            $pool->as('cargos')->get("{$API}/cargos"),
         ]);
         
         return view("personas/registros", compact('heads', 'responses') );
